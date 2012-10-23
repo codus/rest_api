@@ -20,9 +20,16 @@ describe "RestApi::RequestHandler - client" do
     end
   end
 
+  it "should raise an exception if the response is invalid when response is invalid" do 
+    RestClient.should_receive(:get).with("http://www.teste.com.br", :params => {}, :accept=>:json).and_return("")
+    lambda {
+      RestApi::RequestHandler::Client.send(:get, "http://www.teste.com.br")
+    }.should raise_exception(RestApi::Exceptions::ParseResponseException)
+  end
+  
   describe "get" do 
     it "should call RestClient get" do 
-      RestClient.should_receive(:get).with("http://www.teste.com.br", :params => {}, :accept=>:json)
+      RestClient.should_receive(:get).with("http://www.teste.com.br", :params => {}, :accept=>:json).and_return("{ \"casa\":  \"teste\", \"rua\": \"teste2\"}")
       RestApi::RequestHandler::Client.send(:get, "http://www.teste.com.br")
     end
 
@@ -38,7 +45,7 @@ describe "RestApi::RequestHandler - client" do
 
   describe "post" do 
     it "should call RestClient post" do 
-      RestClient.should_receive(:post).with("http://www.teste.com.br/resource2", { :param => true }, :accept=>:json)
+      RestClient.should_receive(:post).with("http://www.teste.com.br/resource2", { :param => true }, :accept=>:json).and_return("{ \"casa\":  \"teste\", \"rua\": \"teste2\"}")
       RestApi::RequestHandler::Client.send(:post, "http://www.teste.com.br/resource2", { :param => true })
     end
 
@@ -54,7 +61,7 @@ describe "RestApi::RequestHandler - client" do
   
   describe "put" do 
     it "should call RestClient post" do 
-      RestClient.should_receive(:put).with("http://www.teste.com.br/resource3", { :param => 3 }, :accept=>:json)
+      RestClient.should_receive(:put).with("http://www.teste.com.br/resource3", { :param => 3 }, :accept=>:json).and_return("{ \"casa\":  \"teste\", \"rua\": \"teste2\"}")
       RestApi::RequestHandler::Client.send(:put, "http://www.teste.com.br/resource3", { :param => 3 })
     end
 
@@ -70,7 +77,7 @@ describe "RestApi::RequestHandler - client" do
 
   describe "delete" do 
     it "should call RestClient post" do 
-      RestClient.should_receive(:delete).with("http://www.teste.com.br/user/3", :params => {}, :accept=>:json)
+      RestClient.should_receive(:delete).with("http://www.teste.com.br/user/3", :params => {}, :accept=>:json).and_return("{ \"casa\":  \"teste\", \"rua\": \"teste2\"}")
       RestApi::RequestHandler::Client.send(:delete, "http://www.teste.com.br/user/3")
     end
 

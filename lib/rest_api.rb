@@ -1,4 +1,4 @@
-require 'active_support/core_ext/hash/conversions'
+require "rest_api/exceptions"
 require "rest_api/version"
 require "rest_api/api"
 require "rest_api/request_handler"

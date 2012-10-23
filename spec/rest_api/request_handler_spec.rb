@@ -13,7 +13,12 @@ describe "RestApi::request_hander" do
   }
 
   describe "make_request" do 
-
+    it "should raise an exception if the response is invalid when connection fails" do 
+      lambda {
+          RestApi::RequestHandler.make_request :testa, "http://www.fakeurl.com.br/test"
+      }.should raise_exception(RestApi::Exceptions::ApiConnectionException)
+    end
+    
     it "should call client get when request type is get" do 
       RestApi::RequestHandler::Client.should_receive(:get).with("http://www.fakeurl.com.br/test", {})
       RestApi::RequestHandler.make_request :get, "http://www.fakeurl.com.br/test"

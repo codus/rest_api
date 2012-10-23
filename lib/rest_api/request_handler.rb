@@ -1,5 +1,4 @@
 require "rest_api/request_handler/client"
-require "active_support/core_ext"
 
 module RestApi  
   module RequestHandler
@@ -11,16 +10,21 @@ module RestApi
 
     def self.make_request request_type, request_url, request_params = nil
       request_params ||= {}
-
-      case request_type
-        when :put
-          client.put request_url, request_params
-        when :post
-          client.post request_url, request_params
-        when :delete
-          client.delete request_url, request_params
-        when :get
-          client.get request_url, request_params
+      begin      
+        case request_type
+          when :put
+            client.put request_url, request_params
+          when :post
+            client.post request_url, request_params
+          when :delete
+            client.delete request_url, request_params
+          when :get
+            client.get request_url, request_params
+          else
+            raise Exception.new("Invalid request method")
+        end
+      rescue Exception => e
+        raise RestApi::Exceptions::ApiConnectionException.new(e)
       end
     end
 

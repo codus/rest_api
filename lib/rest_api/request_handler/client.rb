@@ -23,10 +23,11 @@ module RestApi
 
         def parse_response string_response
           begin 
-            puts string_response
             return JSON.parse(string_response)
-          rescue
-            { :status => 500 }
+          rescue Exception => e
+            raise RestApi::Exceptions::ParseResponseException.new(
+                    :response_body => string_response,
+                    :error => e )
           end
         end
         
