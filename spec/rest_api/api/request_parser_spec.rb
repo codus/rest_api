@@ -1,0 +1,145 @@
+# coding: utf-8
+
+require 'spec_helper'
+require 'ostruct'
+
+describe "RestApi::API - url_parser" do
+  let (:fake_api_url) { "http://www.fakeurl.com/" }
+  before(:each) {
+    RestApi.setup do |config|
+      config.api_url = "http://www.fakeurl.com/"
+    end
+  }
+
+
+  describe "get_url_from_method" do 
+    it "should return the corret url with params" do 
+      RestApi.api::RequestParser.send(:get_url_from_method, :get_casas_from_usuarios, {:usuarios => 3}).should be == "#{fake_api_url}usuarios/3/casas"
+
+      RestApi.api::RequestParser.send(:get_url_from_method, :put_casas_from_usuarios, {:usuarios => 3, :casas => 5}).should be == "#{fake_api_url}usuarios/3/casas/5"
+
+      RestApi.api::RequestParser.send(:get_url_from_method, :get_show_usuarios, {:usuarios => 3}).should be == "#{fake_api_url}usuarios/3/show"
+      RestApi.api::RequestParser.send(:get_url_from_method, :delete_usuarios, {:usuarios => 2}).should be == "#{fake_api_url}usuarios/2"
+    end
+
+    it "should return the corret url  without params" do 
+      RestApi.api::RequestParser.send(:get_url_from_method, :get_casas_from_usuarios).should be == "#{fake_api_url}usuarios/casas"
+    end
+  end
+
+  describe "get_url_from_map" do 
+    let(:array_resources_name) { ["casas", "carros", "usuarios"] }
+    let(:resources_map) { 
+      map = OpenStruct.new
+      map.casas = "casas"
+      map.carros = "onibus"
+      map.usuarios = "administrador"
+      map
+    }
+
+    it "should return the corret url - with params (hash 1 item)" do 
+      RestApi.api::RequestParser.send(:get_url_from_map, array_resources_name, resources_map, {:casas => 4}).should be == "#{fake_api_url}casas/4/onibus/administrador"
+    end
+
+    it "should return the corret url - with params (hash 3 itens)" do 
+      RestApi.api::RequestParser.send(:get_url_from_map, array_resources_name, resources_map, {:casas => 4, :carros => 5, :usuarios => 7}).should be == "#{fake_api_url}casas/4/onibus/5/administrador/7"
+    end
+
+    it "should return the corret url - with params (array 1 item)" do 
+      RestApi.api::RequestParser.send(:get_url_from_map, array_resources_name, resources_map, [4]).should be == "#{fake_api_url}casas/4/onibus/administrador"
+    end
+
+    it "should return the corret url - with params (array 3 itens)" do 
+      RestApi.api::RequestParser.send(:get_url_from_map, array_resources_name, resources_map, [4, 5, 7]).should be == "#{fake_api_url}casas/4/onibus/5/administrador/7"
+    end
+
+    it "should return the corret url -without params" do 
+      RestApi.api::RequestParser.send(:get_url_from_map, array_resources_name, resources_map).should be == "#{fake_api_url}casas/onibus/administrador"
+    end
+
+    it "should return the corret url 2 - without params " do 
+      map = OpenStruct.new
+      map.test = "test"
+      RestApi.api::RequestParser.send(:get_url_from_map, ["test"], map).should be == "#{fake_api_url}test"
+    end
+  end
+
+  describe "get_request_type_from_method" do 
+    [:put, :post, :delete, :get].each do |tipo_do_request_esperado| 
+      it "should return :#{tipo_do_request_esperado} when the method name start with #{tipo_do_request_esperado}" do 
+        RestApi.api::RequestParser.send(:get_request_type_from_method, "#{tipo_do_request_esperado.to_s}_resource".to_sym).should be == tipo_do_request_esperado
+        RestApi.api::RequestParser.send(:get_request_type_from_method, "#{tipo_do_request_esperado.to_s}_resource".to_sym).should be == tipo_do_request_esperado
+        RestApi.api::RequestParser.send(:get_request_type_from_method, "#{tipo_do_request_esperado.to_s}_resource".to_sym).should be == tipo_do_request_esperado
+        RestApi.api::RequestParser.send(:get_request_type_from_method, "#{tipo_do_request_esperado.to_s}_resource".to_sym).should be == tipo_do_request_esperado
+      end
+    end
+  end
+
+  describe "get_url_tokens_from_method" do 
+    ["resource1", "resource2", "resource3"].each do |resource|
+      it "one resource - resource name: #{resource}" do
+        RestApi.api::RequestParser.send(:get_url_tokens_from_method, "get_#{resource}".to_sym).should be == [resource]
+        RestApi.api::RequestParser.send(:get_url_tokens_from_method, "put_#{resource}".to_sym).should be == [resource]
+        RestApi.api::RequestParser.send(:get_url_tokens_from_method, "delete_#{resource}".to_sym).should be == [resource]
+        RestApi.api::RequestParser.send(:get_url_tokens_from_method, "post_#{resource}".to_sym).should be == [resource]
+      end
+
+      ["subresource1", "subresource2", "subresource3"].each do |sub_resource|
+        it "two sub resources" do
+          RestApi.api::RequestParser.send(:get_url_tokens_from_method, "get_#{resource}_from_#{sub_resource}".to_sym).should be == [sub_resource, resource]
+          RestApi.api::RequestParser.send(:get_url_tokens_from_method, "put_#{resource}_from_#{sub_resource}".to_sym).should be == [sub_resource, resource]
+          RestApi.api::RequestParser.send(:get_url_tokens_from_method, "delete_#{resource}_from_#{sub_resource}".to_sym).should be == [sub_resource, resource]
+          RestApi.api::RequestParser.send(:get_url_tokens_from_method, "post_#{resource}_from_#{sub_resource}".to_sym).should be == [sub_resource, resource]
+        end
+      end
+    end
+  end
+
+  describe "insert_resources_params_in_tokens_array" do 
+    it "should insert the resource param as string after resource name - one subresource" do 
+      tokens_array = ["usuarios", "eventos"]
+      RestApi.api::RequestParser.send(:insert_resources_params_in_tokens_array, tokens_array, {:usuarios => 3}).should be == ["usuarios", "3", "eventos"]
+    end
+
+    it "should insert the resource param as string after resource name - four subresources" do 
+      tokens_array = ["usuarios", "eventos", "carros", "festas"]
+      RestApi.api::RequestParser.send(:insert_resources_params_in_tokens_array, tokens_array, {:usuarios => 5, :carros => 234}).should be == ["usuarios", "5", "eventos", "carros", "234", "festas"]
+    end
+
+    it "should ignore if no params" do 
+      tokens_array = ["usuarios", "eventos", "carros", "festas"]
+      RestApi.api::RequestParser.send(:insert_resources_params_in_tokens_array, tokens_array, {}).should be == ["usuarios", "eventos", "carros", "festas"]
+    end
+
+    it "should accept params as an array - same number of resources" do 
+      tokens_array = ["usuarios", "eventos", "carros", "festas"]
+      RestApi.api::RequestParser.send(:insert_resources_params_in_tokens_array, tokens_array, [1,2,3,4]).should be == ["usuarios", "1", "eventos", "2", "carros", "3", "festas", "4"]
+    end
+
+    it "should accept params as an array - differnet number of resources" do 
+      tokens_array = ["usuarios", "eventos", "carros", "festas"]
+      RestApi.api::RequestParser.send(:insert_resources_params_in_tokens_array, tokens_array, [1,2,4]).should be == ["usuarios", "1", "eventos", "2", "carros", "4", "festas"]
+    end
+  end
+
+  describe "pluralize_resource" do 
+    it "should not insert s after digit" do 
+      RestApi.api::RequestParser.send(:pluralize_resource, "3").should be == "3"
+      RestApi.api::RequestParser.send(:pluralize_resource, "4533").should be == "4533"
+      RestApi.api::RequestParser.send(:pluralize_resource, "resource3").should be == "resource3"
+    end
+
+    it "should not insert s after s" do 
+      RestApi.api::RequestParser.send(:pluralize_resource, "kiss").should be == "kiss"
+      RestApi.api::RequestParser.send(:pluralize_resource, "asas").should be == "asas"
+      RestApi.api::RequestParser.send(:pluralize_resource, "foos").should be == "foos"
+    end
+
+
+    it "should not insert after anything except digit or s" do 
+      RestApi.api::RequestParser.send(:pluralize_resource, "usuario").should be == "usuarios"
+      RestApi.api::RequestParser.send(:pluralize_resource, "peixe").should be == "peixes"
+      RestApi.api::RequestParser.send(:pluralize_resource, "carro").should be == "carros"
+    end
+  end
+end
