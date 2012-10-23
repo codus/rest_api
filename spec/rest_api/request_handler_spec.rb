@@ -15,12 +15,12 @@ describe "RestApi::request_hander" do
   describe "make_request" do 
 
     it "should call client get when request type is get" do 
-      RestApi::RequestHandler::Client.should_receive(:get).with("http://www.fakeurl.com.br/test")
+      RestApi::RequestHandler::Client.should_receive(:get).with("http://www.fakeurl.com.br/test", {})
       RestApi::RequestHandler.make_request :get, "http://www.fakeurl.com.br/test"
     end
 
     it "should call client get with querystring when request type is get" do 
-      RestApi::RequestHandler::Client.should_receive(:get).with("http://www.fakeurl.com.br/test?query2=value2&query=value")
+      RestApi::RequestHandler::Client.should_receive(:get).with("http://www.fakeurl.com.br/test", {:query => "value", :query2 => "value2"})
       RestApi::RequestHandler.make_request :get, "http://www.fakeurl.com.br/test", {:query => "value", :query2 => "value2"}
     end
 
@@ -35,12 +35,12 @@ describe "RestApi::request_hander" do
     end
 
     it "should call client delete with querystring when request type is delete" do 
-      RestApi::RequestHandler::Client.should_receive(:delete).with("http://www.fakeurl.com.br/test?query2=value2&query=value")
+      RestApi::RequestHandler::Client.should_receive(:delete).with("http://www.fakeurl.com.br/test", {:query => "value", :query2 => "value2"})
       RestApi::RequestHandler.make_request :delete, "http://www.fakeurl.com.br/test", {:query => "value", :query2 => "value2"}
     end
 
     it "should call client delete when request type is delete" do 
-      RestApi::RequestHandler::Client.should_receive(:delete).with("http://www.fakeurl.com.br/test/5")
+      RestApi::RequestHandler::Client.should_receive(:delete).with("http://www.fakeurl.com.br/test/5", {})
       RestApi::RequestHandler.make_request :delete, "http://www.fakeurl.com.br/test/5"
     end
   end

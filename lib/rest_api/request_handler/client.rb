@@ -6,7 +6,7 @@ module RestApi
     module Client
       class << self
         def get url, params = {}
-          parse_response(RestClient.get(url))
+          parse_response(RestClient.get(url, :params => params))
         end
 
         def post url, params = {}
@@ -18,11 +18,12 @@ module RestApi
         end
         
         def delete url, params = {}
-          parse_response(RestClient.delete(url))
+          parse_response(RestClient.delete(url, :params => params))
         end
 
         def parse_response string_response
           begin 
+            puts string_response
             return JSON.parse(string_response)
           rescue
             { :status => 500 }

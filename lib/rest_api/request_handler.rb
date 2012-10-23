@@ -11,12 +11,6 @@ module RestApi
 
     def self.make_request request_type, request_url, request_params = nil
       request_params ||= {}
-      if request_params.keys.length > 0
-        query_string = "?" + request_params.to_query
-        request_url_with_query_string = request_url + query_string  
-      else
-        request_url_with_query_string = request_url
-      end
 
       case request_type
         when :put
@@ -24,9 +18,9 @@ module RestApi
         when :post
           client.post request_url, request_params
         when :delete
-          client.delete request_url_with_query_string
+          client.delete request_url, request_params
         when :get
-          client.get request_url_with_query_string
+          client.get request_url, request_params
       end
     end
 

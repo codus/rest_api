@@ -13,9 +13,16 @@ describe "RestApi::RequestHandler - client" do
     FakeWeb.register_uri(:delete, "http://www.teste.com.br/user/3", :body => "{ \"casa6\":  \"teste\", \"rua6\": \"teste2\"}")
   end
 
+  context "rest_client" do 
+    it "should call the url with querystring" do 
+      FakeWeb.register_uri(:get, "http://www.teste.com.br/user/3?name=value", :body => "{ \"casa6\":  \"teste\", \"rua6\": \"teste2\"}")
+      RestClient.get "http://www.teste.com.br/user/3", :params => {:name => "value"}
+    end
+  end
+
   describe "get" do 
     it "should call RestClient get" do 
-      RestClient.should_receive(:get).with("http://www.teste.com.br")
+      RestClient.should_receive(:get).with("http://www.teste.com.br", :params => {})
       RestApi::RequestHandler::Client.send(:get, "http://www.teste.com.br")
     end
 
@@ -63,7 +70,7 @@ describe "RestApi::RequestHandler - client" do
 
   describe "delete" do 
     it "should call RestClient post" do 
-      RestClient.should_receive(:delete).with("http://www.teste.com.br/user/3")
+      RestClient.should_receive(:delete).with("http://www.teste.com.br/user/3", :params => {})
       RestApi::RequestHandler::Client.send(:delete, "http://www.teste.com.br/user/3")
     end
 
