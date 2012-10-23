@@ -22,7 +22,7 @@ describe "RestApi::RequestHandler - client" do
 
   describe "get" do 
     it "should call RestClient get" do 
-      RestClient.should_receive(:get).with("http://www.teste.com.br", :params => {})
+      RestClient.should_receive(:get).with("http://www.teste.com.br", :params => {}, :accept=>:json)
       RestApi::RequestHandler::Client.send(:get, "http://www.teste.com.br")
     end
 
@@ -38,7 +38,7 @@ describe "RestApi::RequestHandler - client" do
 
   describe "post" do 
     it "should call RestClient post" do 
-      RestClient.should_receive(:post).with("http://www.teste.com.br/resource2", { :param => true })
+      RestClient.should_receive(:post).with("http://www.teste.com.br/resource2", { :param => true }, :accept=>:json)
       RestApi::RequestHandler::Client.send(:post, "http://www.teste.com.br/resource2", { :param => true })
     end
 
@@ -54,7 +54,7 @@ describe "RestApi::RequestHandler - client" do
   
   describe "put" do 
     it "should call RestClient post" do 
-      RestClient.should_receive(:put).with("http://www.teste.com.br/resource3", { :param => 3 })
+      RestClient.should_receive(:put).with("http://www.teste.com.br/resource3", { :param => 3 }, :accept=>:json)
       RestApi::RequestHandler::Client.send(:put, "http://www.teste.com.br/resource3", { :param => 3 })
     end
 
@@ -70,7 +70,7 @@ describe "RestApi::RequestHandler - client" do
 
   describe "delete" do 
     it "should call RestClient post" do 
-      RestClient.should_receive(:delete).with("http://www.teste.com.br/user/3", :params => {})
+      RestClient.should_receive(:delete).with("http://www.teste.com.br/user/3", :params => {}, :accept=>:json)
       RestApi::RequestHandler::Client.send(:delete, "http://www.teste.com.br/user/3")
     end
 
