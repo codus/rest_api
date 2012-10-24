@@ -3,6 +3,7 @@ require "rest_api/request_handler/client"
 module RestApi  
   module RequestHandler
     class << self 
+      private
       def client
         RestApi::RequestHandler::Client
       end
