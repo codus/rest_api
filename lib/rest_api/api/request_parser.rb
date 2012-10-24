@@ -1,3 +1,5 @@
+require 'set'
+
 module RestApi
   module API
     module RequestParser
@@ -63,6 +65,20 @@ module RestApi
 
         def pluralize_resource resource_name
           (resource_name.match(/(\d+|s)$/).nil?) ? (resource_name + "s") : (resource_name)
+        end
+
+        def ensure_resource_name resource_name
+          ensured_resource_names << resource_name.to_s
+        end
+
+        def reset_ensure_resource_name
+          @ensured_resource_names = Set.new
+        end
+
+        private
+        def ensured_resource_names
+          @ensured_resource_names ||= Set.new
+          @ensured_resource_names
         end
       end
     end

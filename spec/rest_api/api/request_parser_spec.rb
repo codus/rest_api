@@ -11,6 +11,36 @@ describe "RestApi::API - url_parser" do
     end
   }
 
+  describe "ensured_resource_names" do 
+    it "should return a new set if empty" do 
+      RestApi.api::RequestParser.send(:ensured_resource_names).should be_empty
+    end
+
+    it "should preserve the content" do 
+      RestApi.api::RequestParser.send(:ensured_resource_names) << :one
+      RestApi.api::RequestParser.send(:ensured_resource_names) << :two
+
+      RestApi.api::RequestParser.send(:ensured_resource_names).length.should be == 2
+    end
+  end
+
+  describe "ensure_resource_name" do 
+    it "should add the resource name to the set of ensured resources names" do 
+      RestApi.api::RequestParser.ensure_resource_name :my_resource
+      RestApi.api::RequestParser.send(:ensured_resource_names).include?("my_resource").should be == true
+    end
+  end
+
+
+  describe "reset_ensure_resource_name" do 
+    it "should clear the ensured_resource_names set" do 
+      RestApi.api::RequestParser.ensure_resource_name :my_resource
+      RestApi.api::RequestParser.ensure_resource_name :my_resource2
+      RestApi.api::RequestParser.reset_ensure_resource_name
+      
+      RestApi.api::RequestParser.send(:ensured_resource_names).length.should be == 0
+    end
+  end
 
   describe "get_url_from_method" do 
     it "should return the corret url with params" do 

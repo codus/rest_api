@@ -1,7 +1,8 @@
 require 'ostruct'
+require 'set'
 
 module RestApi 
-  @@mapped_methods = []
+  @@mapped_methods = Set.new
   # custom map to api call
   # Example: 
   # RestApi.map_custom_api_method :put, :casas_in_usuarios do |map| 
@@ -32,8 +33,7 @@ module RestApi
     # create the method
     method_name = "#{request_type}_#{request_resources}"
 
-    self.mapped_methods << method_name.to_sym unless self.request.respond_to?(method_name.to_sym)
-  
+    self.mapped_methods << method_name.to_sym
   
     RequestHandler.class_eval do
       eigenclass = class << self
@@ -63,7 +63,7 @@ module RestApi
         end
       end
     end
-    @@mapped_methods = []
+    @@mapped_methods = Set.new
   end
 
   def self.mapped_methods
