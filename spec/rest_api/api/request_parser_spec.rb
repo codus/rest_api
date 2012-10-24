@@ -30,6 +30,19 @@ describe "RestApi::API - url_parser" do
       RestApi.api::RequestParser.ensure_resource_name :my_resource
       RestApi.api::RequestParser.send(:ensured_resource_names).include?("my_resource").should be == true
     end
+
+    it "should accept many arguments" do 
+      RestApi.api::RequestParser.ensure_resource_name :my_resource1, :my_resource2, :my_resource13
+      RestApi.api::RequestParser.send(:ensured_resource_names).include?("my_resource1").should be == true
+      RestApi.api::RequestParser.send(:ensured_resource_names).include?("my_resource2").should be == true
+      RestApi.api::RequestParser.send(:ensured_resource_names).include?("my_resource13").should be == true
+    end
+
+    it "should  raise ArgumentError when there is no argument" do 
+      lambda {
+        RestApi.api::RequestParser.ensure_resource_name
+      }.should raise_exception(ArgumentError)
+    end
   end
 
 

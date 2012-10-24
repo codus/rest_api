@@ -148,7 +148,7 @@ UNIQUE METHOD
 RESTFUL method
 
 ENSURE RESOURCE NAME
-reset ensured names
+reset ensured names :my_resource1, :my_resource2 ...
 
 unmap_resources
 ## Contributing

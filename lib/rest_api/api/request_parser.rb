@@ -71,8 +71,14 @@ module RestApi
           (resource_name.match(/(\d+|s)$/).nil?) ? (resource_name + "s") : (resource_name)
         end
 
-        def ensure_resource_name resource_name
-          ensured_resource_names << resource_name.to_s
+        def ensure_resource_name *resource_names
+          if resource_names.length == 0
+            raise ArgumentError.new("wrong number of arguments (0 for N)")
+          else
+            resource_names.each do |resource_name|
+              ensured_resource_names << resource_name.to_s
+            end
+          end
         end
 
         def reset_ensure_resource_name
