@@ -35,9 +35,9 @@ module RestApi
     RestApi::RequestHandler
   end
 
-  # ensure_resource_name
-  def self.ensure_resource_name *resources_names
-    RestApi::API::RequestParser.ensure_resource_name *resources_names
+  # request parser reference
+  def self.request_parser
+    RestApi::API::RequestParser
   end
 
 

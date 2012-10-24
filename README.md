@@ -28,6 +28,12 @@ Or install it yourself as:
   end
 ```
 
+or
+
+```ruby
+  RestApi.api_url = "http://www.myapiurl.com/"
+```
+
 * **In Rails**
 
 Just put the following code in /config/initializers/rest_api.rb
@@ -143,14 +149,140 @@ If there is only one argument and it's a hash it will be the :request_params
 
 3. Advanced Configuration
 
-MAPPING
-UNIQUE METHOD
-RESTFUL method
+There are two considerations in the current implementation that you must be aware of and must configure the RestApi to work properly:
 
-ENSURE RESOURCE NAME
-reset ensured names :my_resource1, :my_resource2 ...
+1. Consideration 1 - Every word separated by a "_" will be considered as resource name EXCEPT:
+* the initial get, post, put an delete
+* the words from, of, in
 
-unmap_resources
+So if you have a resource called *public_users* and make a request like this:
+
+```ruby
+RestApi.request.get_public_users
+```
+
+It will make a GET to "http://www.myapiurl.com/users/public".
+
+If you want you can ensure a resource name with this command:
+
+```ruby
+RestApi.request_parser.ensure_resource_name :public_users
+```
+
+Then when you call
+
+```ruby
+RestApi.request.get_public_users
+```
+
+It will make a GET to "http://www.myapiurl.com/public_users".
+
+And you can do something like this:
+
+```ruby
+RestApi.request.get_public_users :resources_params => {:public_users => 2}
+``` 
+
+It will make a GET to "http://www.myapiurl.com/public_users/2".
+
+You can ensure more than one resource name at once
+
+RestApi.request_parser.ensure_resource_name :my_resource1, :my_resource2, :my_resource3 ....
+
+If you need you can reset the ensured resources names with
+
+```ruby
+RestApi.request_parser.reset_ensure_resource_name
+``` 
+
+2. Consideration 2 - Every resource name in the method call must be *unique*. For instance, let's say you have a resource called category that 
+
+*belongs_to a category
+*has_many/has_one category
+
+So maybe you have a RESTful url like this: http://www.myapiurl.com/categories/2/categories to get/post/put/delete the child categories of category 2. But if you try
+
+```ruby
+RestApi.request.get_categories_in_categories 2
+```
+
+or
+
+```ruby
+RestApi.request.get_categories_in_categories :resources_params => {:categories => 2}
+```
+
+It will make a GET to 
+
+http://www.myapiurl.com/categories/2/categories/2
+
+Because the resources params arguments are linked to a resource name defined in the method call. You can turn this aroud by manually defining a request method and mapping the resources with the following command:
+
+```ruby
+RestApi.map_custom_api_method :get, :subcategories_in_categories do |map| 
+  map.subcategories = "categories"
+end
+```
+
+Now when you do
+
+```ruby
+RestApi.request.get_subcategories_in_categories :resources_params => {:subcategories => 2}
+```
+
+Will make a GET to
+
+http://www.myapiurl.com/categories/2/categories/
+
+Note that if you don't define a map to some resource name in the method it will be parsed to a url resource as itself.
+
+Note that you only defined for the GET method. If you make
+
+```ruby
+RestApi.request.put_subcategories_in_categories :resources_params => {:categories => 2}
+```
+
+The custom mapping will be ignored and will be made a PUT to
+
+http://www.myapiurl.com/categories/2/subcategories/
+
+You can define a custom method for every REST verb OR you can use the *add_restful_api_methods* method. This method automatically creathe the GET, POST, PUT and DELETE methods for a given resources method name and map. Example
+
+```ruby
+RestApi.add_restful_api_methods :subcategories_in_categories do |map| 
+  map.subcategories = "categories"
+end
+```
+
+Now you can do:
+
+```ruby
+RestApi.request.put_subcategories_in_categories :resources_params => {:subcategories => 5, :categories => 2}
+```
+That a PUT will be made to:
+
+http://www.myapiurl.com/categories/2/categories/5
+
+If yout need to reset the mapped resources you can call
+
+```ruby
+RestApi.unmap_resources
+```
+
+## TODO
+
+Here we will put the features that will be implemented in the future by priority.
+
+* API autentication  
+* Extend the client to accept others formats than JSON
+* Create the RestApi::Model to work like an ActiveRecord model (ok. we have a long way to go)
+
+## Contact
+
+If you have any suggestions or a bug fix you can create a new issue or email us.
+
+You can visit our page on <http://www.codus.com>
+
 ## Contributing
 
 1. Fork it
