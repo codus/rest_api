@@ -1,6 +1,6 @@
 # RestApi - RESTful client for everything
 
-**RestApi** aims to be a generic RESTful client for ruby. The goal is to build a friendly API client that you can use right away with minimum configuration. But, if you want, you can bend the client as you wish
+**RestApi** aims to be a generic RESTful client for ruby. The goal is to build a friendly API client that you can use right away with minimum configuration. But, if you want, you can bend the client as you wish.
 
 ## Installation
 
@@ -38,7 +38,7 @@ Just put the above code in /config/initializers/rest_api.rb
 
 ## Usage
 
-Every request must be made through the RestApi.request object. 
+Every request must be made through the RestApi.request object. And the expeted response must be in JSON format. Then it will be parsed to a ruby hash.
 
 ```ruby
 RestApi.request.my_request_method(arguments)
@@ -103,8 +103,8 @@ RestApi.request.delete_users(:resources_params => { :users => 7})
 RestApi.request.put_cars_in_users(:resources_params => { :users => 7})  
 # PUT to "http://www.myapiurl.com/users/7/cars/" 
 
-RestApi.request.put_cars_in_users(:resources_params => { :cars => 18})  
-# PUT to "http://www.myapiurl.com/users/cars/18" 
+ RestApi.request.put_cars_in_users(:resources_params => { :cars => 18, :users => 5})   
+# PUT to "http://www.myapiurl.com/users/5/cars/18" 
 
 RestApi.request.get_users(:resources_params => { :users => 18})  
 # GET to "http://www.myapiurl.com/users/18" 
@@ -118,10 +118,10 @@ You can pass a hash in the :request_params where, for each pair, the key is the 
 **EXAMPLE**
 
 ```ruby 
-RestApi.request.post_users(:request_params => { :user => {:name => "myname"})
+RestApi.request.post_users(:request_params => { :user => {:name => "myname"}})
 # POST to "http://www.myapiurl.com/users/" with "{ :user => {:name => "name"}" in the header
 
-RestApi.request.get_users(:request_params => { :user => {:name => "name"})  
+RestApi.request.get_users(:request_params => { :user => {:name => "name"}})  
 # GET to "http://www.myapiurl.com/users?name=myname" 
 ```
 
@@ -133,10 +133,10 @@ Obviously you can use them together.
 **EXAMPLES**
 
 ```ruby 
-RestApi.request.get_cars_from_users(:request_params => { :page => 5, :resource_params => { :users => 8})
+RestApi.request.get_cars_from_users(:request_params => { :page => 5}, :resources_params => { :users => 8})
 # GET to "http://www.myapiurl.com/users/8/cars?page=5" 
 
-RestApi.request.post_cars_in_users(:request_params => { :car => {:model => "ferrari"}, :resource_params => { :users => 8})
+RestApi.request.post_cars_in_users(:request_params => { :car => {:model => "ferrari"}}, :resources_params => { :users => 8})
 # POST to "http://www.myapiurl.com/users/8/cars" with "{ :car => {:model => "ferrari"}" in the header
 ```
 
@@ -181,9 +181,9 @@ If there is only one argument and it is a hash then it will be considered as the
 
 ```ruby
 RestApi.request.get_users(:page => 5)
-# GET to "http://www.myapiurl.com/users/?page=8
+# GET to "http://www.myapiurl.com/users/?page=5
 
-RestApi.request.post_cars_in_users(:car => {:model => "mercedes"})
+RestApi.request.post_cars_in_users(18, 6, :car => {:model => "mercedes"})
 # POST to "http://www.myapiurl.com/users/18/cars/6"  with {:car => {:model => "mercedes"} in the header
 ```
 
@@ -204,7 +204,7 @@ RestApi.request.get_public_users
 
 It will make a GET to:
 
-*http://www.myapiurl.com/users/public_users*
+*http://www.myapiurl.com/users/users/public*
 
 To make things work properly you must ensure the name of the resource like this:
 
@@ -230,7 +230,7 @@ RestApi.request.get_public_users :resources_params => {:public_users => 2}
 
 It will make a GET to: 
 
-*http://www.myapiurl.com/public_users/2
+*http://www.myapiurl.com/public_users/2*
 
 You can ensure more than one resource name at once:
 
@@ -289,7 +289,7 @@ end
 Now when you do:
 
 ```ruby
-RestApi.request.get_subcategories_in_categories :resources_params => {:subcategories => 2}
+RestApi.request.get_subcategories_in_categories :resources_params => {:categories => 2}
 ```
 
 Will make a GET to:
