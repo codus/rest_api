@@ -34,9 +34,13 @@ module RestApi
         end
 
         def get_url_tokens_from_method method_id
-          possible_resources_array = method_id.to_s.split("_")
-          possible_resources_array.shift if possible_resources_array[0].to_s.match(/^get|put|delete|post/i) #removes request type
-          possible_resources_array.delete_if{ |method_token| method_token =~ /^(from|in|of)$/}.reverse
+          method_name_without_pronouns = method_id.to_s.gsub(/_(in|of|from)_/,"_").gsub(/(put|get|post|delete)_/, "")
+          method_name_with_reserved_mask = method_name_without_pronouns
+          ensured_resource_names.each { |ensured_resource_name| 
+            method_name_with_reserved_mask.gsub!(ensured_resource_name, ensured_resource_name.split("_").join("+"))
+          }
+          url_tokens = method_name_with_reserved_mask.split("_").map { |resource_name_masked| resource_name_masked.gsub("+", "_")}
+          url_tokens.reverse
         end
 
         def insert_resources_params_in_tokens_array tokens_array, resources_params

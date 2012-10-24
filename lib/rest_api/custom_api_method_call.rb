@@ -15,7 +15,6 @@ module RestApi
   # RestApi.request.get_boss_from_offices -> GET "<APIURL>/offices/boss"
   # RestApi.request.get_boss_from_offices(:resources_params => { :offices => 5} ) -> GET "<APIURL>/offices/5/boss"
 
-
   def self.map_custom_api_method request_type, request_resources
     array_resources_names = API::RequestParser.get_url_tokens_from_method request_resources
     

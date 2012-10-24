@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 require 'ostruct'
+require 'set'
 
 describe "RestApi::API - url_parser" do
   let (:fake_api_url) { "http://www.fakeurl.com/" }
@@ -122,6 +123,16 @@ describe "RestApi::API - url_parser" do
           RestApi.api::RequestParser.send(:get_url_tokens_from_method, "post_#{resource}_from_#{sub_resource}".to_sym).should be == [sub_resource, resource]
         end
       end
+    end
+
+    it "should kept the ensured resources names - one resource" do 
+      RestApi.api::RequestParser.stub(:ensured_resource_names).and_return(Set.new(["public_users", "some_resource"]))
+      RestApi.api::RequestParser.get_url_tokens_from_method("get_public_users".to_sym).should be == ["public_users"]
+    end
+
+    it "should kept the ensured resources names - two resources" do 
+      RestApi.api::RequestParser.stub(:ensured_resource_names).and_return(Set.new(["public_users", "some_resources"]))
+      RestApi.api::RequestParser.get_url_tokens_from_method("get_public_users_from_some_resources_in_admins_from_system".to_sym).sort.should be == ["public_users", "some_resources", "admins", "system"].sort
     end
   end
 

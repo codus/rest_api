@@ -25,4 +25,9 @@ describe "RestApi" do
     RestApi.instance_eval { api_url }.should be == "http://www.localhost.com:4000/"
   end
 
+  it "should ensure resource name" do   
+    RestApi::API::RequestParser.should_receive(:ensure_resource_name).with(:my_resource)
+    RestApi.ensure_resource_name :my_resource
+  end
+
 end

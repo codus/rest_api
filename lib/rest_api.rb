@@ -25,14 +25,22 @@ module RestApi
     end
   end
   
-  # GYP api reference
+  # api reference
   def self.api
-    return RestApi::API
+    RestApi::API
   end
 
-  # GYP request reference
+  # request reference
   def self.request
     RestApi::RequestHandler
   end
+
+  # ensure_resource_name
+  def self.ensure_resource_name resource_name
+    RestApi::API::RequestParser.ensure_resource_name resource_name
+  end
+
+
+
 
 end
