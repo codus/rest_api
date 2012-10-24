@@ -23,6 +23,8 @@ module RestApi
           else
             raise Exception.new("Invalid request method")
         end
+      rescue RestApi::Exceptions::ParseResponseException => e
+        raise e
       rescue Exception => e
         raise RestApi::Exceptions::ApiConnectionException.new(e)
       end

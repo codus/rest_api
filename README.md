@@ -148,6 +148,7 @@ UNIQUE METHOD
 RESTFUL method
 
 ENSURE RESOURCE NAME
+reset ensured names
 
 unmap_resources
 ## Contributing

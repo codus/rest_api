@@ -13,10 +13,19 @@ describe "RestApi::request_hander" do
   }
 
   describe "make_request" do 
-    it "should raise an exception if the response is invalid when connection fails" do 
+    it "should raise an ApiConnectionException if the response is invalid when connection fails" do 
+      FakeWeb.allow_net_connect = false
       lambda {
-          RestApi::RequestHandler.make_request :testa, "http://www.fakeurl.com.br/test"
+          RestApi::RequestHandler.make_request :get, "http://www.fakeurl.com.br/error"
       }.should raise_exception(RestApi::Exceptions::ApiConnectionException)
+    end
+
+    it "should raise an ParseResponseException if the response is invalid when is not a JSON response" do 
+      FakeWeb.allow_net_connect = false
+      FakeWeb.register_uri(:get, "http://www.fakeurl.com.br/json", :body => "")
+      lambda {
+          RestApi::RequestHandler.make_request :get, "http://www.fakeurl.com.br/json"
+      }.should raise_exception(RestApi::Exceptions::ParseResponseException)
     end
     
     it "should call client get when request type is get" do 

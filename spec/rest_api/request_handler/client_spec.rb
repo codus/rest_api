@@ -20,7 +20,7 @@ describe "RestApi::RequestHandler - client" do
     end
   end
 
-  it "should raise an exception if the response is invalid when response is invalid" do 
+  it "should raise an ParseResponseException if the response is invalid when response is invalid" do 
     RestClient.should_receive(:get).with("http://www.teste.com.br", :params => {}, :accept=>:json).and_return("")
     lambda {
       RestApi::RequestHandler::Client.send(:get, "http://www.teste.com.br")
