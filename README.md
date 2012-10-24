@@ -38,7 +38,7 @@ Just put the above code in /config/initializers/rest_api.rb
 
 ## Usage
 
-Every request must be made through the RestApi.request object. And the expeted response must be in JSON format. Then it will be parsed to a ruby hash.
+Every request must be made through the RestApi.request object. And the expected response must be in JSON format. Then it will be parsed to a ruby hash.
 
 ```ruby
 RestApi.request.my_request_method(arguments)
