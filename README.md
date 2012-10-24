@@ -10,7 +10,7 @@ Add this line to your application's Gemfile:
 
 And then execute:
 
-    $ bundle
+    $ bundle install
 
 Or install it yourself as:
 
@@ -175,7 +175,7 @@ RestApi.request.put_cars_in_users(18, 6, :car => {:model => "mercedes"})
 # PUT to "http://www.myapiurl.com/users/18/cars/6"  with { :car => {:model => "mercedes"} } in the header
 ```
 
-If there is only one argument and it is a hash then it will be considered as the **:request_params**
+If there is only one argument and it is a hash then it will be considered as the **:request_params**.
 
 **EXAMPLES**
 
@@ -202,7 +202,9 @@ So if you have a resource called *public_users* and make a request like this:
 RestApi.request.get_public_users
 ```
 
-It will make a GET to *"http://www.myapiurl.com/users/public"*.
+It will make a GET to:
+
+*http://www.myapiurl.com/users/public_users*
 
 To make things work properly you must ensure the name of the resource like this:
 
@@ -216,7 +218,9 @@ Then when you call:
 RestApi.request.get_public_users
 ```
 
-It will make a GET to *"http://www.myapiurl.com/public_users"*.
+It will make a GET to: 
+
+*http://www.myapiurl.com/public_users*
 
 And you can do something like this:
 
@@ -224,7 +228,9 @@ And you can do something like this:
 RestApi.request.get_public_users :resources_params => {:public_users => 2}
 ``` 
 
-It will make a GET to *"http://www.myapiurl.com/public_users/2"*.
+It will make a GET to: 
+
+*http://www.myapiurl.com/public_users/2
 
 You can ensure more than one resource name at once:
 
@@ -268,7 +274,7 @@ RestApi.request.get_categories_in_categories(:resources_params => {:categories =
 
 It will make a GET to:
 
-http://www.myapiurl.com/categories/2/categories/2
+*http://www.myapiurl.com/categories/2/categories/2*
 
 Because the resources params arguments are linked to a resource name defined in the method call.  
 
@@ -326,7 +332,7 @@ RestApi.request.put_subcategories_in_categories :resources_params => {:subcatego
 ```
 That a PUT will be made to:
 
-http://www.myapiurl.com/categories/2/categories/5
+*http://www.myapiurl.com/categories/2/categories/5*
 
 #### RestApi#unmap_resources
 ****
