@@ -301,7 +301,7 @@ If you don't define a map to some resource name in the method, it will be parsed
 #### RestApi#add_restful_api_methods
 ****
 
-Note that *map_custom_api_method* only define one request type per time. If you try: 
+Note that *map_custom_api_method* only declares one method per call. If you try: 
 
 ```ruby
 RestApi.map_custom_api_method :get, :subcategories_in_categories do |map| 
