@@ -189,10 +189,12 @@ RestApi.request.post_cars_in_users(:car => {:model => "mercedes"})
 
 ## Advanced Configuration
 
-There are some considerations in the current implementation that you must be aware of to make RestApi to work properly:
+There are some considerations in the current implementation that you must be aware of to make RestApi to work properly. Here we will show them to you and the configuration for every case.
 
-#### Every word separated by a "_" will be considered as resource
+#### RestApi.request_parser#ensure_resource_name
 ****
+
+Every word separated by a "_" will be considered as resource.
 
 So if you have a resource called *public_users* and make a request like this:
 
@@ -230,14 +232,19 @@ You can ensure more than one resource name at once:
 RestApi.request_parser.ensure_resource_name :my_resource1, :my_resource2, :my_resource3 ....
 ``` 
 
+#### RestApi.request_parser#reset_ensure_resource_name
+****
+
 If you need you can reset the ensured resources names with:
 
 ```ruby
 RestApi.request_parser.reset_ensure_resource_name
 ``` 
 
-#### Every resource name in the method call must be *unique*
+#### RestApi#map_custom_api_method#
 ****
+Every resource name in the method call must be *unique*.
+
 For instance, let's say you have a resource called categories. And each category:
 
 * *belongs_to* a category
@@ -259,13 +266,13 @@ or
 RestApi.request.get_categories_in_categories(:resources_params => {:categories => 2})
 ```
 
-It will make a GET to 
+It will make a GET to:
 
 http://www.myapiurl.com/categories/2/categories/2
 
 Because the resources params arguments are linked to a resource name defined in the method call.  
 
-You can turn this aroud by manually defining a request method and mapping the resources like this:
+You can turn this aroud by defining a request method and mapping the resources like this:
 
 ```ruby
 RestApi.map_custom_api_method :get, :subcategories_in_categories do |map| 
@@ -273,25 +280,32 @@ RestApi.map_custom_api_method :get, :subcategories_in_categories do |map|
 end
 ```
 
-Now when you do
+Now when you do:
 
 ```ruby
 RestApi.request.get_subcategories_in_categories :resources_params => {:subcategories => 2}
 ```
 
-Will make a GET to
+Will make a GET to:
 
 *http://www.myapiurl.com/categories/2/categories/*
 
 If you don't define a map to some resource name in the method, it will be parsed to the RESTful URL as itself.
 
-Note that you only defined the map for the *GET* method. If you try: 
+#### RestApi#add_restful_api_methods
+****
+
+Note that *map_custom_api_method* only define one request type per time. If you try: 
 
 ```ruby
+RestApi.map_custom_api_method :get, :subcategories_in_categories do |map| 
+  map.subcategories = "categories"
+end
+
 RestApi.request.put_subcategories_in_categories :resources_params => {:categories => 2}
 ```
 
-The custom *GET* mapping will be ignored and will be made a *PUT* to
+The custom *GET* mapping will be ignored and will be made a *PUT* request with the default map to:
 
 *http://www.myapiurl.com/categories/2/subcategories/*
 
@@ -314,6 +328,9 @@ That a PUT will be made to:
 
 http://www.myapiurl.com/categories/2/categories/5
 
+#### RestApi#unmap_resources
+****
+
 If yout need to reset the mapped resources you can call:
 
 ```ruby
@@ -327,10 +344,11 @@ Here we will put the features that will be implemented in the future.
 * API autentication  
 * Extend the client to accept others formats than JSON
 * Create the RestApi::Model to work like an ActiveRecord model (ok. we have a long way to go)
-
+* ...
+* 
 ## Contact
 
-If you have any suggestions or a bug fix feel free to a new issue.
+If you have any suggestions or a bug fix feel free to create a new issue.
 
 You can visit our page on <http://www.codus.com.br>
 
