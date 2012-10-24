@@ -4,16 +4,17 @@ require File.expand_path('../lib/rest_api/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Codus Tecnologia"]
   gem.email         = ["vinicius.oyama@codus.com.br"]
-  gem.description   = %q{Gem to connect with RESTfull APIs}
-  gem.summary       = %q{A generic API client for ruby.}
-  gem.homepage      = ""
+  gem.platform    = Gem::Platform::RUBY
+  gem.description   = %q{An API client for any application!}
+  gem.summary       = %q{An API client for any application!}
+  gem.homepage      = "https://github.com/codus/rest_api"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "rest_api"
   gem.require_paths = ["lib"]
-  gem.version       = "1.0.0"
+  gem.version       = RestApi::VERSION
 
 
   gem.add_dependency('activesupport', '~> 3.2')
