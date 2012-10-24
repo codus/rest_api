@@ -21,15 +21,15 @@ Or install it yourself as:
 * **In ruby**
 
 ```ruby
-  RestApi.setup do |config|
-    config.api_url = "http://www.myapiurl.com/"
-  end
+RestApi.setup do |config|
+  config.api_url = "http://www.myapiurl.com/"
+end
 ```
 
 or
 
 ```ruby
-  RestApi.api_url = "http://www.myapiurl.com/"
+RestApi.api_url = "http://www.myapiurl.com/"
 ```
 
 * **In Rails**
@@ -59,26 +59,26 @@ These are reserved words that the resources cannot use as name:
 **EXAMPLES**
 
 ```ruby 
-  RestApi.request.get_users  
-  # GET to "http://www.myapiurl.com/users"
+RestApi.request.get_users  
+# GET to "http://www.myapiurl.com/users"
 
-  RestApi.request.get_cars_from_users    
-  # GET to "http://www.myapiurl.com/users/cars"
+RestApi.request.get_cars_from_users    
+# GET to "http://www.myapiurl.com/users/cars"
 
-  RestApi.request.get_cars_users  
-  # GET to "http://www.myapiurl.com/users/cars"
+RestApi.request.get_cars_users  
+# GET to "http://www.myapiurl.com/users/cars"
 
-  RestApi.request.post_cars   
-  # POST to "http://www.myapiurl.com/cars"
+RestApi.request.post_cars   
+# POST to "http://www.myapiurl.com/cars"
 
-  RestApi.request.put_cars_users  
-  # PUT to "http://www.myapiurl.com/users/cars"
+RestApi.request.put_cars_users  
+# PUT to "http://www.myapiurl.com/users/cars"
 
-  RestApi.request.delete_users  
-  # DELETE to "http://www.myapiurl.com/users"
+RestApi.request.delete_users  
+# DELETE to "http://www.myapiurl.com/users"
 
-  RestApi.request.delete_houses_from_users  
-  # DELETE to "http://www.myapiurl.com/users/houses"
+RestApi.request.delete_houses_from_users  
+# DELETE to "http://www.myapiurl.com/users/houses"
 ```
 
 ### arguments
@@ -97,18 +97,17 @@ You can pass a hash in the :resource_params where, for each pair, the key is the
 **EXAMPLES**
 
 ```ruby 
-  RestApi.request.delete_users(:resources_params => { :users => 7})  
-  # DELETE to "http://www.myapiurl.com/users/7" 
+RestApi.request.delete_users(:resources_params => { :users => 7})  
+# DELETE to "http://www.myapiurl.com/users/7" 
 
-  RestApi.request.put_cars_in_users(:resources_params => { :users => 7})  
-  # PUT to "http://www.myapiurl.com/users/7/cars/" 
+RestApi.request.put_cars_in_users(:resources_params => { :users => 7})  
+# PUT to "http://www.myapiurl.com/users/7/cars/" 
 
-  RestApi.request.put_cars_in_users(:resources_params => { :cars => 18})  
-  # PUT to "http://www.myapiurl.com/users/cars/18" 
+RestApi.request.put_cars_in_users(:resources_params => { :cars => 18})  
+# PUT to "http://www.myapiurl.com/users/cars/18" 
 
-  RestApi.request.get_users(:resources_params => { :users => 18})  
-  # GET to "http://www.myapiurl.com/users/18" 
-
+RestApi.request.get_users(:resources_params => { :users => 18})  
+# GET to "http://www.myapiurl.com/users/18" 
 ```
 
 **:request_params**
@@ -119,11 +118,11 @@ You can pass a hash in the :request_params where, for each pair, the key is the 
 **EXAMPLE**
 
 ```ruby 
-  RestApi.request.post_users(:request_params => { :user => {:name => "myname"})
-  # POST to "http://www.myapiurl.com/users/" with "{ :user => {:name => "name"}" in the header
+RestApi.request.post_users(:request_params => { :user => {:name => "myname"})
+# POST to "http://www.myapiurl.com/users/" with "{ :user => {:name => "name"}" in the header
 
-  RestApi.request.get_users(:request_params => { :user => {:name => "name"})  
-  # GET to "http://www.myapiurl.com/users?name=myname" 
+RestApi.request.get_users(:request_params => { :user => {:name => "name"})  
+# GET to "http://www.myapiurl.com/users?name=myname" 
 ```
 
 **Using both :resource_params and :request_params**
@@ -134,11 +133,11 @@ Obviously you can use them together.
 **EXAMPLES**
 
 ```ruby 
-  RestApi.request.get_cars_from_users(:request_params => { :page => 5, :resource_params => { :users => 8})
-  # GET to "http://www.myapiurl.com/users/8/cars?page=5" 
+RestApi.request.get_cars_from_users(:request_params => { :page => 5, :resource_params => { :users => 8})
+# GET to "http://www.myapiurl.com/users/8/cars?page=5" 
 
-  RestApi.request.post_cars_in_users(:request_params => { :car => {:model => "ferrari"}, :resource_params => { :users => 8})
-  # POST to "http://www.myapiurl.com/users/8/cars" with "{ :car => {:model => "ferrari"}" in the header
+RestApi.request.post_cars_in_users(:request_params => { :car => {:model => "ferrari"}, :resource_params => { :users => 8})
+# POST to "http://www.myapiurl.com/users/8/cars" with "{ :car => {:model => "ferrari"}" in the header
 ```
 
 **Short Syntax**
@@ -148,17 +147,17 @@ You can pass as many arguments you want. They will be considered as a **:resourc
 **EXAMPLES**
 
 ```ruby 
-  RestApi.request.get_users(18)
-  # GET to "http://www.myapiurl.com/users/18" 
+RestApi.request.get_users(18)
+# GET to "http://www.myapiurl.com/users/18" 
 
-  RestApi.request.get_cars_from_users(18)
-  # GET to "http://www.myapiurl.com/users/18/cars" 
+RestApi.request.get_cars_from_users(18)
+# GET to "http://www.myapiurl.com/users/18/cars" 
 
-  RestApi.request.get_cars_from_users(18, 6) 
-  # GET to "http://www.myapiurl.com/users/18/cars/6" 
+RestApi.request.get_cars_from_users(18, 6) 
+# GET to "http://www.myapiurl.com/users/18/cars/6" 
 
-  RestApi.request.put_cars_in_users(18, 6) 
-  # PUT to "http://www.myapiurl.com/users/18/cars/6" 
+RestApi.request.put_cars_in_users(18, 6) 
+# PUT to "http://www.myapiurl.com/users/18/cars/6" 
 ```
 
 **IF** the last argument is a hash then it will be considered the **:request_params**.
@@ -166,14 +165,14 @@ You can pass as many arguments you want. They will be considered as a **:resourc
 **EXAMPLES**
 
 ```ruby 
-  RestApi.request.get_cars_from_users(8, :page => 5)
-  # GET to "http://www.myapiurl.com/users/8/cars?page=5"
+RestApi.request.get_cars_from_users(8, :page => 5)
+# GET to "http://www.myapiurl.com/users/8/cars?page=5"
 
-  RestApi.request.put_users(18, :user => {:name => "myname"})
-  # PUT to "http://www.myapiurl.com/users/18/"  with { :user => {:name => "myname"} } in the header
+RestApi.request.put_users(18, :user => {:name => "myname"})
+# PUT to "http://www.myapiurl.com/users/18/"  with { :user => {:name => "myname"} } in the header
 
-  RestApi.request.put_cars_in_users(18, 6, :car => {:model => "mercedes"})
-  # PUT to "http://www.myapiurl.com/users/18/cars/6"  with { :car => {:model => "mercedes"} } in the header
+RestApi.request.put_cars_in_users(18, 6, :car => {:model => "mercedes"})
+# PUT to "http://www.myapiurl.com/users/18/cars/6"  with { :car => {:model => "mercedes"} } in the header
 ```
 
 If there is only one argument and it is a hash then it will be considered as the **:request_params**
@@ -181,13 +180,11 @@ If there is only one argument and it is a hash then it will be considered as the
 **EXAMPLES**
 
 ```ruby
+RestApi.request.get_users(:page => 5)
+# GET to "http://www.myapiurl.com/users/?page=8
 
-  RestApi.request.get_users(:page => 5)
-  # GET to "http://www.myapiurl.com/users/?page=8
-
-  RestApi.request.post_cars_in_users(:car => {:model => "mercedes"})
-  # POST to "http://www.myapiurl.com/users/18/cars/6"  with {:car => {:model => "mercedes"} in the header
-
+RestApi.request.post_cars_in_users(:car => {:model => "mercedes"})
+# POST to "http://www.myapiurl.com/users/18/cars/6"  with {:car => {:model => "mercedes"} in the header
 ```
 
 ## Advanced Configuration
