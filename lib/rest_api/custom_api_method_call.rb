@@ -49,11 +49,9 @@ module RestApi
         end
       end
     end
-
   end
 
   def self.unmap_resources
-
     self.mapped_methods.each do |mapped_method_id|
       RequestHandler.class_eval do
         eigenclass = class << self
@@ -70,5 +68,11 @@ module RestApi
 
   def self.mapped_methods
     @@mapped_methods
+  end
+
+  def self.add_restful_api_methods request_resources, &block
+    [:get, :put, :post, :delete].each do |request_type|
+      self.map_custom_api_method request_type, request_resources, &block
+    end
   end
 end
