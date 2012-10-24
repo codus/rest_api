@@ -61,7 +61,7 @@ module RestApi
           params_insert_positions.inject(0) do |insert_offset,insert_position_hash|
             insert_position = insert_position_hash[:position] + insert_offset
             tokens_array_copy.insert(insert_position, insert_position_hash[:param].to_s)
-            insert_offset = insert_offset + 1
+            insert_offset + 1
           end
 
           tokens_array_copy
