@@ -50,14 +50,15 @@ describe "RestApi" do
   end
 
   describe "add_restful_api_methods" do
-      before(:each) {
-        RestApi.unmap_resources
-        RestApi.setup do |config|
-          config.api_url = "http://www.fakeurl.com/"
-          config.add_restful_api_methods :users
-        end
-        FakeWeb.allow_net_connect = false 
-      }
+    before(:all) {
+      RestApi.unmap_resources
+      RestApi.setup do |config|
+        config.api_url = "http://www.fakeurl.com/"
+        config.add_restful_api_methods :users
+      end
+      FakeWeb.allow_net_connect = false 
+    }
+
     it "should add a get method to the api request module" do 
       RestApi.request.respond_to?(:get_users).should be == true
       RestApi.mapped_methods.include?(:get_users).should be == true
@@ -80,5 +81,8 @@ describe "RestApi" do
       RestApi.mapped_methods.include?(:delete_users).should be == true
     end
 
+    it "should accept a block to map the resources" do 
+      RestApi.add_restful_api_methods :users
+    end
   end
 end
