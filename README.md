@@ -189,7 +189,7 @@ RestApi.request.post_cars_in_users(18, 6, :car => {:model => "mercedes"})
 
 ## Advanced Configuration
 
-There are some considerations in the current implementation that you must be aware of to make RestApi to work properly. Here we will show them to you and the configuration for every case.
+There are some considerations in the current implementation that you must be aware of to make RestApi work properly. Here we will show them to you and the configuration for each case.
 
 #### RestApi.request_parser#ensure_resource_name
 ****
@@ -260,7 +260,7 @@ And you have a RESTful url like this:
 
 *http://www.myapiurl.com/categories/2/categories*
 
-That allows to get/post/put/delete the child categories of category 2. But if you try to do: 
+That allows you to get/post/put/delete the child categories of category 2. But if you try to do: 
 
 ```ruby
 RestApi.request.get_categories_in_categories(2)
