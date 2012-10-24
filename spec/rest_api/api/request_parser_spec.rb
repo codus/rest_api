@@ -12,30 +12,30 @@ describe "RestApi::API - url_parser" do
     end
   }
 
-  describe "ensured_resource_names" do 
+  describe "ensured_resources_names" do 
     it "should return a new set if empty" do 
-      RestApi.api::RequestParser.send(:ensured_resource_names).should be_empty
+      RestApi.api::RequestParser.send(:ensured_resources_names).should be_empty
     end
 
     it "should preserve the content" do 
-      RestApi.api::RequestParser.send(:ensured_resource_names) << :one
-      RestApi.api::RequestParser.send(:ensured_resource_names) << :two
+      RestApi.api::RequestParser.send(:ensured_resources_names) << :one
+      RestApi.api::RequestParser.send(:ensured_resources_names) << :two
 
-      RestApi.api::RequestParser.send(:ensured_resource_names).length.should be == 2
+      RestApi.api::RequestParser.send(:ensured_resources_names).length.should be == 2
     end
   end
 
   describe "ensure_resource_name" do 
     it "should add the resource name to the set of ensured resources names" do 
       RestApi.api::RequestParser.ensure_resource_name :my_resource
-      RestApi.api::RequestParser.send(:ensured_resource_names).include?("my_resource").should be == true
+      RestApi.api::RequestParser.send(:ensured_resources_names).include?("my_resource").should be == true
     end
 
     it "should accept many arguments" do 
       RestApi.api::RequestParser.ensure_resource_name :my_resource1, :my_resource2, :my_resource13
-      RestApi.api::RequestParser.send(:ensured_resource_names).include?("my_resource1").should be == true
-      RestApi.api::RequestParser.send(:ensured_resource_names).include?("my_resource2").should be == true
-      RestApi.api::RequestParser.send(:ensured_resource_names).include?("my_resource13").should be == true
+      RestApi.api::RequestParser.send(:ensured_resources_names).include?("my_resource1").should be == true
+      RestApi.api::RequestParser.send(:ensured_resources_names).include?("my_resource2").should be == true
+      RestApi.api::RequestParser.send(:ensured_resources_names).include?("my_resource13").should be == true
     end
 
     it "should  raise ArgumentError when there is no argument" do 
@@ -47,12 +47,12 @@ describe "RestApi::API - url_parser" do
 
 
   describe "reset_ensure_resource_name" do 
-    it "should clear the ensured_resource_names set" do 
+    it "should clear the ensured_resources_names set" do 
       RestApi.api::RequestParser.ensure_resource_name :my_resource
       RestApi.api::RequestParser.ensure_resource_name :my_resource2
       RestApi.api::RequestParser.reset_ensure_resource_name
       
-      RestApi.api::RequestParser.send(:ensured_resource_names).length.should be == 0
+      RestApi.api::RequestParser.send(:ensured_resources_names).length.should be == 0
     end
   end
 
@@ -139,12 +139,12 @@ describe "RestApi::API - url_parser" do
     end
 
     it "should kept the ensured resources names - one resource" do 
-      RestApi.api::RequestParser.stub(:ensured_resource_names).and_return(Set.new(["public_users", "some_resource"]))
+      RestApi.api::RequestParser.stub(:ensured_resources_names).and_return(Set.new(["public_users", "some_resource"]))
       RestApi.api::RequestParser.get_url_tokens_from_method("get_public_users".to_sym).should be == ["public_users"]
     end
 
     it "should kept the ensured resources names - two resources" do 
-      RestApi.api::RequestParser.stub(:ensured_resource_names).and_return(Set.new(["public_users", "some_resources"]))
+      RestApi.api::RequestParser.stub(:ensured_resources_names).and_return(Set.new(["public_users", "some_resources"]))
       RestApi.api::RequestParser.get_url_tokens_from_method("get_public_users_from_some_resources_in_admins_from_system".to_sym).sort.should be == ["public_users", "some_resources", "admins", "system"].sort
     end
   end

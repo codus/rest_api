@@ -36,7 +36,7 @@ module RestApi
         def get_url_tokens_from_method method_id
           method_name_without_pronouns = method_id.to_s.gsub(/_(in|of|from)_/,"_").gsub(/(put|get|post|delete)_/, "")
           method_name_with_reserved_mask = method_name_without_pronouns
-          ensured_resource_names.each { |ensured_resource_name| 
+          ensured_resources_names.each { |ensured_resource_name| 
             method_name_with_reserved_mask.gsub!(ensured_resource_name, ensured_resource_name.split("_").join("+"))
           }
           url_tokens = method_name_with_reserved_mask.split("_").map { |resource_name_masked| resource_name_masked.gsub("+", "_")}
@@ -71,24 +71,24 @@ module RestApi
           (resource_name.match(/(\d+|s)$/).nil?) ? (resource_name + "s") : (resource_name)
         end
 
-        def ensure_resource_name *resource_names
-          if resource_names.length == 0
+        def ensure_resource_name *resources_names
+          if resources_names.length == 0
             raise ArgumentError.new("wrong number of arguments (0 for N)")
           else
-            resource_names.each do |resource_name|
-              ensured_resource_names << resource_name.to_s
+            resources_names.each do |resource_name|
+              ensured_resources_names << resource_name.to_s
             end
           end
         end
 
         def reset_ensure_resource_name
-          @ensured_resource_names = Set.new
+          @ensured_resources_names = Set.new
         end
 
         private
-        def ensured_resource_names
-          @ensured_resource_names ||= Set.new
-          @ensured_resource_names
+        def ensured_resources_names
+          @ensured_resources_names ||= Set.new
+          @ensured_resources_names
         end
       end
     end
