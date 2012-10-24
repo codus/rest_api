@@ -50,13 +50,11 @@ describe "RestApi" do
   end
 
   describe "add_restful_api_methods" do
-    before(:all) {
-      RestApi.unmap_resources
+    before(:each) {
       RestApi.setup do |config|
         config.api_url = "http://www.fakeurl.com/"
         config.add_restful_api_methods :users
       end
-      FakeWeb.allow_net_connect = false 
     }
 
     it "should add a get method to the api request module" do 
@@ -82,7 +80,11 @@ describe "RestApi" do
     end
 
     it "should accept a block to map the resources" do 
-      RestApi.add_restful_api_methods :users
+      RestApi.add_restful_api_methods :person_in_places do |map|
+        map.person = "people"
+      end
+      RestApi::RequestHandler.should_receive(:make_request).with(:get, "http://www.fakeurl.com/places/2/people", nil).and_return("")
+      RestApi.request.get_person_in_places(2)
     end
   end
 end
