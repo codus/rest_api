@@ -5,7 +5,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Codus Tecnologia"]
   gem.email         = ["vinicius.oyama@codus.com.br"]
   gem.description   = %q{Gem to connect with RESTfull APIs}
-  gem.summary       = %q{A generic API client for ruby}
+  gem.summary       = %q{A generic API client for ruby.}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($\)
