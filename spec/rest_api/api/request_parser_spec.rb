@@ -174,6 +174,22 @@ describe "RestApi::API - url_parser" do
       tokens_array = ["usuarios", "eventos", "carros", "festas"]
       RestApi.api::RequestParser.send(:insert_resources_params_in_tokens_array, tokens_array, [1,2,4]).should be == ["usuarios", "1", "eventos", "2", "carros", "4", "festas"]
     end
+
+    it "should accept params as an array - resources with same name" do 
+      tokens_array = ["usuarios", "usuarios"]
+      RestApi.api::RequestParser.send(:insert_resources_params_in_tokens_array, tokens_array, [1]).should be == ["usuarios", "1", "usuarios"]
+    end
+
+    it "should accept params as an array - resources with same name case 2" do 
+      tokens_array = ["usuarios", "usuarios", "usuarios"]
+      RestApi.api::RequestParser.send(:insert_resources_params_in_tokens_array, tokens_array, [1]).should be == ["usuarios", "1", "usuarios", "usuarios"]
+    end
+
+
+    it "should accept params as an array - resources with same name case 3" do 
+      tokens_array = ["usuarios", "usuarios", "usuarios"]
+      RestApi.api::RequestParser.send(:insert_resources_params_in_tokens_array, tokens_array, [1,6]).should be == ["usuarios", "1", "usuarios", "6", "usuarios"]
+    end
   end
 
   describe "pluralize_resource" do 

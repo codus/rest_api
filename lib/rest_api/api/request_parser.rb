@@ -44,23 +44,25 @@ module RestApi
         end
 
         def insert_resources_params_in_tokens_array(tokens_array, resources_params)
-          resources_params_hash = {}
-          tokens_array_copy = Array.new tokens_array #copy so the original remains intact
+
+          # copy so the original remains intact (because tokens_array is a pointer)
+          tokens_array_copy = Array.new tokens_array 
+          params_insert_positions = Array.new
 
           if resources_params.is_a?(Hash)
-            resources_params_hash = resources_params
-          else  
-            tokens_array_copy.each_with_index do |token, index| 
-              resources_params_hash[token.to_sym] = resources_params[index] unless resources_params[index].nil?
+            tokens_array_copy.each_with_index do |token, index|
+              params_insert_positions <<  {  
+                                            :param => resources_params[token.to_sym], 
+                                            :position => (index + 1)
+                                          } if resources_params.has_key? token.to_sym
             end
-          end
-
-          params_insert_positions = Array.new
-          tokens_array_copy.each_with_index do |token, index|
-            params_insert_positions <<  {  
-                                          :param => resources_params_hash[token.to_sym], 
-                                          :position => (index + 1)
-                                        } if resources_params_hash.has_key? token.to_sym
+          else  
+            resources_params.each_with_index do |param, index| 
+              params_insert_positions <<  {  
+                                            :param => param, 
+                                            :position => (index + 1)
+                                          }
+            end
           end
 
           params_insert_positions.inject(0) do |insert_offset,insert_position_hash|
@@ -68,7 +70,6 @@ module RestApi
             tokens_array_copy.insert(insert_position, insert_position_hash[:param].to_s)
             insert_offset + 1
           end
-
           tokens_array_copy
         end
 

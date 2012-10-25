@@ -266,13 +266,17 @@ And you have a RESTful url like this:
 
 *http://www.myapiurl.com/categories/2/categories*
 
-That allows you to get/post/put/delete the child categories of category 2. But if you try to do: 
+That allows you to get/post/put/delete the child categories of category 2. And if you try to do: 
 
 ```ruby
 RestApi.request.get_categories_in_categories(2)
 ```
 
-or
+It will be OK and will make a GET to:
+
+*http://www.myapiurl.com/categories/2/categories/*
+
+But if you try:
 
 ```ruby
 RestApi.request.get_categories_in_categories(:resources_params => {:categories => 2})
@@ -282,7 +286,7 @@ It will make a GET to:
 
 *http://www.myapiurl.com/categories/2/categories/2*
 
-Because the resources params arguments are linked to a resource name defined in the method call.  
+Because the resources params arguments are linked to the resource name defined in the method call.  
 
 You can turn this aroud by defining a request method and mapping the resources like this:
 
