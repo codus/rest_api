@@ -353,6 +353,7 @@ RestApi.unmap_resources
 
 Here we will put the features that will be implemented in the future.
 
+* Module architecture refactoring
 * API autentication  
 * Extend the client to accept others formats than JSON
 * Create the RestApi::Model to work like an ActiveRecord model (ok. we have a long way to go)
