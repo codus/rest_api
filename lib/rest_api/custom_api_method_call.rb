@@ -15,8 +15,8 @@ module RestApi
   # RestApi.request.get_boss_from_offices -> GET "<APIURL>/offices/boss"
   # RestApi.request.get_boss_from_offices(:resources_params => { :offices => 5} ) -> GET "<APIURL>/offices/5/boss"
 
-  def self.map_custom_api_method request_type, request_resources
-    array_resources_names = API::RequestParser.get_url_tokens_from_method request_resources
+  def self.map_custom_api_method(request_type, request_resources)
+    array_resources_names = API::RequestParser.get_url_tokens_from_method(request_resources)
     
     # initialize the resource map and pass to the yield
     resources_map = OpenStruct.new
@@ -31,7 +31,6 @@ module RestApi
 
     # create the method
     method_name = "#{request_type}_#{request_resources}"
-
     self.mapped_methods << method_name.to_sym
   
     RequestHandler.class_eval do
@@ -40,11 +39,11 @@ module RestApi
       end 
 
       eigenclass.class_eval do
-        # self = RestApi::RequestHandler
+        # self <- RestApi::RequestHandler eigenclass
         define_method method_name do |*arguments|
-          params = get_params_from_array_arguments arguments
+          params = get_params_from_array_arguments(arguments)
           request_url = API::RequestParser.get_url_from_map(array_resources_names, resources_map, params[:resources_params])
-          make_request request_type, request_url, params[:request_params]
+          make_request(request_type, request_url, params[:request_params])
         end
       end
     end
@@ -58,7 +57,7 @@ module RestApi
         end 
 
         eigenclass.class_eval do
-          undef_method mapped_method_id
+          undef_method(mapped_method_id)
         end
       end
     end
@@ -69,9 +68,9 @@ module RestApi
     @@mapped_methods
   end
 
-  def self.add_restful_api_methods request_resources, &block
+  def self.add_restful_api_methods(request_resources, &block)
     [:get, :put, :post, :delete].each do |request_type|
-      self.map_custom_api_method request_type, request_resources, &block
+      self.map_custom_api_method(request_type, request_resources, &block)
     end
   end
 end

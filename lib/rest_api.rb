@@ -39,8 +39,4 @@ module RestApi
   def self.request_parser
     RestApi::API::RequestParser
   end
-
-
-
-
 end

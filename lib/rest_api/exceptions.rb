@@ -11,7 +11,6 @@ module RestApi
       end
     end
 
-
-    class ApiConnectionException < Exception;end;
+    class ApiConnectionException < Exception; end;
   end
 end

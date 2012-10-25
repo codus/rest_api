@@ -9,18 +9,18 @@ module RestApi
       end
     end
 
-    def self.make_request request_type, request_url, request_params = nil
+    def self.make_request(request_type, request_url, request_params = nil)
       request_params ||= {}
       begin      
         case request_type
           when :put
-            client.put request_url, request_params
+            client.put(request_url, request_params)
           when :post
-            client.post request_url, request_params
+            client.post(request_url, request_params)
           when :delete
-            client.delete request_url, request_params
+            client.delete(request_url, request_params)
           when :get
-            client.get request_url, request_params
+            client.get(request_url, request_params)
           else
             raise Exception.new("Invalid request method")
         end
@@ -55,6 +55,7 @@ module RestApi
 
     def self.get_params_from_array_arguments arguments 
       params_hash = { }
+
       if arguments[0].is_a? Hash
         if (arguments[0].has_key?(:resources_params) || arguments[0].has_key?(:request_params))
           params_hash[:resources_params] = arguments[0][:resources_params]
@@ -69,6 +70,7 @@ module RestApi
         end
         params_hash[:resources_params] = Array.new arguments
       end
+      
       params_hash.delete :request_params if params_hash[:request_params].nil?
       params_hash
     end
