@@ -61,7 +61,7 @@ module RestApi
               params_insert_positions <<  {  
                                             :param => param, 
                                             :position => (index + 1)
-                                          }
+                                          } if (index + 1) <= tokens_array.length
             end
           end
 

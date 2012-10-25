@@ -180,11 +180,16 @@ describe "RestApi::API - url_parser" do
       RestApi.api::RequestParser.send(:insert_resources_params_in_tokens_array, tokens_array, [1]).should be == ["usuarios", "1", "usuarios"]
     end
 
+
+    it "should accept params as an array - ignore extra params" do 
+      tokens_array = ["usuarios", "usuarios"]
+      RestApi.api::RequestParser.send(:insert_resources_params_in_tokens_array, tokens_array, [1,5,6,7]).should be == ["usuarios", "1", "usuarios", "5"]
+    end
+
     it "should accept params as an array - resources with same name case 2" do 
       tokens_array = ["usuarios", "usuarios", "usuarios"]
       RestApi.api::RequestParser.send(:insert_resources_params_in_tokens_array, tokens_array, [1]).should be == ["usuarios", "1", "usuarios", "usuarios"]
     end
-
 
     it "should accept params as an array - resources with same name case 3" do 
       tokens_array = ["usuarios", "usuarios", "usuarios"]
