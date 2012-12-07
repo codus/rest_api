@@ -24,6 +24,22 @@ module RestApi
       self.api.url = value + "/"
     end
   end
+
+  def self.api_key_name
+    self.api.api_key_name
+  end
+
+  def self.api_key_name=(value)
+    self.api.api_key_name = value
+  end
+
+  def self.api_key_value
+    self.api.api_key_value
+  end
+
+  def self.api_key_value=(value)
+    self.api.api_key_value = value
+  end
   
   # api reference
   def self.api

@@ -11,6 +11,11 @@ module RestApi
 
     def self.make_request(request_type, request_url, request_params = nil)
       request_params ||= {}
+
+      if RestApi.api_key_name != ""
+        request_params.merge!({RestApi.api_key_name.to_sym => RestApi.api_key_value,})
+      end
+
       begin      
         case request_type
           when :put

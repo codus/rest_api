@@ -17,6 +17,19 @@ describe "RestApi" do
     RestApi.instance_eval { api_url }.should be == "http://www.localhost.com:4000/"
   end
 
+  it "should configure api_key_name" do 
+    RestApi.setup do |config|
+      config.api_key_name = "api_key_name"
+    end
+    RestApi.instance_eval { api_key_name }.should be == "api_key_name"
+  end
+
+  it "should configure api_key_value" do 
+    RestApi.setup do |config|
+      config.api_key_value = "api_key_value"
+    end
+    RestApi.instance_eval { api_key_value }.should be == "api_key_value"
+  end
 
   it "should configure api_url - whithout slash" do 
     RestApi.setup do |config|

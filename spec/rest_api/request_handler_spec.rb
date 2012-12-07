@@ -57,6 +57,14 @@ describe "RestApi::request_hander" do
       RestApi::RequestHandler::Client.should_receive(:delete).with("http://www.fakeurl.com.br/test/5", {})
       RestApi::RequestHandler.make_request :delete, "http://www.fakeurl.com.br/test/5"
     end
+
+    it "should call client get with api_url" do 
+      RestApi.api_key_name = "key_name"
+      RestApi.api_key_value = "key_value"
+
+      RestApi::RequestHandler::Client.should_receive(:get).with("http://www.fakeurl.com.br/test", {:key_name => "key_value"})
+      RestApi::RequestHandler.make_request :get, "http://www.fakeurl.com.br/test"
+    end
   end
   
   describe "method_missing" do 
